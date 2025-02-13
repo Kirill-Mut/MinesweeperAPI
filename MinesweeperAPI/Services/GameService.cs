@@ -11,29 +11,29 @@ namespace MinesweeperAPI.Services
 
         public GameInfoResponse StartNewGame(NewGameRequest request)
         {
-            if (request.Width > 30 || request.Height > 30 || request.MinesCount >= request.Width * request.Height)
+            if (request.Width > 30 || request.Height > 30 || request.Mines_count >= request.Width * request.Height)
             {
                 throw new ArgumentException("Invalid game parameters.");
             }
 
             var gameId = Guid.NewGuid();
-            var field = GenerateField(request.Width, request.Height, request.MinesCount);
+            var field = GenerateField(request.Width, request.Height, request.Mines_count);
 
             _games[gameId] = new GameState
             {
                 Width = request.Width,
                 Height = request.Height,
-                MinesCount = request.MinesCount,
+                Mines_count = request.Mines_count,
                 Field = field,
                 Completed = false
             };
 
             return new GameInfoResponse
             {
-                GameId = gameId,
+                Game_id = gameId,
                 Width = request.Width,
                 Height = request.Height,
-                MinesCount = request.MinesCount,
+                Mines_count = request.Mines_count,
                 Completed = false,
                 Field = GetHiddenField(field)
             };
@@ -41,7 +41,7 @@ namespace MinesweeperAPI.Services
 
         public GameInfoResponse MakeTurn(GameTurnRequest request)
         {
-            if (!_games.TryGetValue(request.GameId, out var gameState))
+            if (!_games.TryGetValue(request.Game_id, out var gameState))
             {
                 throw new ArgumentException("Game not found.");
             }
@@ -61,10 +61,10 @@ namespace MinesweeperAPI.Services
                 gameState.Completed = true;
                 return new GameInfoResponse
                 {
-                    GameId = request.GameId,
+                    Game_id = request.Game_id,
                     Width = gameState.Width,
                     Height = gameState.Height,
-                    MinesCount = gameState.MinesCount,
+                    Mines_count = gameState.Mines_count,
                     Completed = true,
                     Field = gameState.Field
                 };
@@ -77,15 +77,15 @@ namespace MinesweeperAPI.Services
 
             var hiddenField = GetHiddenField(gameState.Field);
 
-            if (CheckWinCondition(hiddenField, gameState.MinesCount))
+            if (CheckWinCondition(hiddenField, gameState.Mines_count))
             {
                 gameState.Completed = true;
                 return new GameInfoResponse
                 {
-                    GameId = request.GameId,
+                    Game_id = request.Game_id,
                     Width = gameState.Width,
                     Height = gameState.Height,
-                    MinesCount = gameState.MinesCount,
+                    Mines_count = gameState.Mines_count,
                     Completed = true,
                     Field = gameState.Field
                 };
@@ -93,10 +93,10 @@ namespace MinesweeperAPI.Services
 
             return new GameInfoResponse
             {
-                GameId = request.GameId,
+                Game_id = request.Game_id,
                 Width = gameState.Width,
                 Height = gameState.Height,
-                MinesCount = gameState.MinesCount,
+                Mines_count = gameState.Mines_count,
                 Completed = false,
                 Field = hiddenField
             };
@@ -198,7 +198,7 @@ namespace MinesweeperAPI.Services
         {
             public int Width { get; set; }
             public int Height { get; set; }
-            public int MinesCount { get; set; }
+            public int Mines_count { get; set; }
             public char[][] Field { get; set; }
             public bool Completed { get; set; }
         }

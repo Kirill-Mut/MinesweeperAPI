@@ -4,6 +4,6 @@
     {
         public int Width { get; set; }
         public int Height { get; set; }
-        public int MinesCount { get; set; }
+        public int Mines_count { get; set; }
     }
 }

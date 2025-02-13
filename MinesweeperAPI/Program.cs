@@ -1,11 +1,14 @@
+using MinesweeperAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавление сервисов
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<IGameService, GameService>();
 
-// Настройка CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -18,10 +21,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Использование CORS
+
 app.UseCors("AllowAll");
 
-// Настройка middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
